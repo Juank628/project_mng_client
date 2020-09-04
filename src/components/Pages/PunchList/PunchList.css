@@ -1,0 +1,13 @@
+.Punch-List-Header {
+    height: 50px;
+}
+
+.Punch-List-Header .add {
+    color: green;
+    font-size: 30px;
+    margin-top: 10px;
+}
+
+.Punch-List-Header .add:hover {
+    cursor: pointer;
+}
