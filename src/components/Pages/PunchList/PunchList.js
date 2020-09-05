@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import Modal from "../../Modal/Modal";
+import EditPunchlist from "../../EditPunchlist/EditPunchlist";
 import "./PunchList.css";
 
 export class PunchList extends Component {
@@ -20,15 +21,15 @@ export class PunchList extends Component {
       showModal: false,
     });
   };
-  secondsToDate = seconds => {
-    let itemDate = new Date(seconds * 1000)
-    var formatter = new Intl.DateTimeFormat('es-pe', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
+  secondsToDate = (seconds) => {
+    let itemDate = new Date(seconds * 1000);
+    var formatter = new Intl.DateTimeFormat("es-pe", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
     });
-    return formatter.format(itemDate)
-  }
+    return formatter.format(itemDate);
+  };
   render() {
     const { fetching, punchlist } = this.props.punchlistReducer;
     return (
@@ -55,7 +56,6 @@ export class PunchList extends Component {
               <thead>
                 <tr>
                   <th>Fecha</th>
-                  <th>Area</th>
                   <th>Tag</th>
                   <th>Observacion</th>
                   <th>Criticidad</th>
@@ -66,9 +66,8 @@ export class PunchList extends Component {
               </thead>
               <tbody>
                 {punchlist.map((item) => (
-                  <tr>
+                  <tr key={item.id}>
                     <th>{this.secondsToDate(item.date._seconds)}</th>
-                    <th>Area</th>
                     <th>Tag</th>
                     <th>{item.description}</th>
                     <th>{item.priority}</th>
@@ -84,7 +83,7 @@ export class PunchList extends Component {
               closeModal={this.closeModal}
               title=""
             >
-              <h2>Modal</h2>
+              <EditPunchlist />
             </Modal>
           </div>
         )}
