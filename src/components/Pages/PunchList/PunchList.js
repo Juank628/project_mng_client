@@ -68,11 +68,11 @@ export class PunchList extends Component {
                 {punchlist.map((item) => (
                   <tr key={item.id}>
                     <th>{this.secondsToDate(item.date._seconds)}</th>
-                    <th>Tag</th>
+                    <th>{item.tag}</th>
                     <th>{item.description}</th>
                     <th>{item.priority}</th>
                     <th>{item.owner}</th>
-                    <th>Avance</th>
+                    <th>{item.progress}</th>
                     <th>Dias abierto</th>
                   </tr>
                 ))}

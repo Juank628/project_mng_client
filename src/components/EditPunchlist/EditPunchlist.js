@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { addToPunchlistAction } from "../../redux/punchlistDuck";
 
 export class EditPunchlist extends Component {
   state = {
@@ -12,6 +14,23 @@ export class EditPunchlist extends Component {
   updateData = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
+    });
+  };
+
+  addToPunchlist = (e) => {
+    e.preventDefault();
+    const { tag, description, owner, priority, progress } = this.state;
+    const date = {
+      _seconds: new Date().getTime() / 1000,
+      _nanoseconds: 0,
+    };
+    this.props.addToPunchlistAction({
+      date,
+      tag,
+      description,
+      owner,
+      priority,
+      progress,
     });
   };
 
@@ -87,7 +106,7 @@ export class EditPunchlist extends Component {
         <button
           type="button"
           className="btn btn-success btn-block mt-3"
-          //onClick={this.createData}
+          onClick={this.addToPunchlist}
         >
           Agregar
         </button>
@@ -96,4 +115,12 @@ export class EditPunchlist extends Component {
   }
 }
 
-export default EditPunchlist;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = {
+  addToPunchlistAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditPunchlist);
