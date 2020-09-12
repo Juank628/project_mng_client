@@ -1,22 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import {
+  InputField,
+  SelectField,
+  TextAreaField,
+} from "../FormElements/FormElements";
 import { addToPunchlistAction } from "../../redux/punchlistDuck";
 
 export class EditPunchlist extends Component {
-  state = {
-    tag: "",
-    description: "",
-    owner: "",
-    priority: 1,
-    progress: 0,
-  };
-
-  updateData = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
-
   addToPunchlist = (e) => {
     e.preventDefault();
     const { tag, description, owner, priority, progress } = this.state;
@@ -36,81 +29,97 @@ export class EditPunchlist extends Component {
 
   render() {
     return (
-      <form className="form border rounded px-5 pb-5 pt-3">
-        <div className="row">
-          <div className="form-group col">
-            <label>Tag</label>
-            <input
-              type="text"
-              className="form-control"
-              name="tag"
-              onChange={this.updateData}
-              //defaultValue={this.props.quantity}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="form-group col">
-            <label htmlFor="exampleFormControlTextarea1">Descripción</label>
-            <textarea
-              className="form-control"
-              name="description"
-              rows="3"
-              onChange={this.updateData}
-            ></textarea>
-          </div>
-        </div>
-        <div className="row">
-          <div className="form-group col">
-            <label>Responsable</label>
-            <select
-              className="form-control"
-              name="owner"
-              //defaultValue={this.props.area}
-              onChange={this.updateData}
-            >
-              <option value="HATCH">HATCH</option>
-              <option value="ABB">ABB</option>
-              <option value="VyC">V&C</option>
-            </select>
-          </div>
-        </div>
-        <div className="class row">
-          <div className="form-group col-6">
-            <label>Criticidad</label>
-            <select
-              className="form-control"
-              name="priority"
-              //defaultValue={this.props.area}
-              onChange={this.updateData}
-            >
-              <option value="1">Alta</option>
-              <option value="2">Media</option>
-              <option value="3">Baja</option>
-            </select>
+      <Formik
+        initialValues={{
+          tag: "",
+          description: "",
+          owner: "HATCH",
+          priority: 1,
+          progress: 0,
+        }}
+        validationSchema={Yup.object({
+          tag: Yup.string()
+            .max(15, "Must be 15 characters or less")
+            .required("tag requerido"),
+        })}
+        onSubmit={(values, { setSubmitting }) => {
+          console.log("submiting");
+          setTimeout(() => {
+            setSubmitting(false);
+          }, 400);
+          console.log(JSON.stringify(values, null, 2));
+        }}
+      >
+        <Form className="form border rounded px-5 pb-5 pt-3">
+          <div className="row">
+            <div className="form-group col">
+              <InputField label="Tag" name="tag" type="text" />
+            </div>
           </div>
 
-          <div className="form-group col-6">
-            <label>Avance</label>
-            <input
-              type="number"
-              className="form-control"
-              name="progress"
-              //defaultValue={this.props.quantity}
-              onChange={this.updateData}
-            />
+          <div className="row">
+            <div className="form-group col">
+              <TextAreaField
+                name="description"
+                label="descripcion"
+                numberOfRows={3}
+              />
+            </div>
           </div>
-        </div>
+          <div className="row">
+            <div className="form-group col">
+              <SelectField
+                name="owner"
+                label="Responsable"
+                options={[
+                  {
+                    value: "HATCH",
+                    text: "HATCH",
+                  },
+                  {
+                    value: "ABB",
+                    text: "ABB",
+                  },
+                  {
+                    value: "VyC",
+                    text: "VyC",
+                  },
+                ]}
+              />
+            </div>
+          </div>
+          <div className="class row">
+            <div className="form-group col-6">
+              <SelectField
+                name="priority"
+                label="Criticidad"
+                options={[
+                  {
+                    value: "1",
+                    text: "Alta",
+                  },
+                  {
+                    value: "2",
+                    text: "Media",
+                  },
+                  {
+                    value: "3",
+                    text: "Baja",
+                  },
+                ]}
+              />
+            </div>
 
-        <button
-          type="button"
-          className="btn btn-success btn-block mt-3"
-          onClick={this.addToPunchlist}
-        >
-          Agregar
-        </button>
-      </form>
+            <div className="form-group col-6">
+              <InputField label="Avance" name="progress" type="number" />
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-success btn-block mt-3">
+            Agregar
+          </button>
+        </Form>
+      </Formik>
     );
   }
 }
