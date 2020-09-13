@@ -10,21 +10,10 @@ import {
 import { addToPunchlistAction } from "../../redux/punchlistDuck";
 
 export class EditPunchlist extends Component {
-  addToPunchlist = (e) => {
-    e.preventDefault();
-    const { tag, description, owner, priority, progress } = this.state;
-    const date = {
-      _seconds: new Date().getTime() / 1000,
-      _nanoseconds: 0,
-    };
-    this.props.addToPunchlistAction({
-      date,
-      tag,
-      description,
-      owner,
-      priority,
-      progress,
-    });
+  closeModalHandler = () => {
+    setTimeout(() => {
+      this.props.closeModal();
+    }, 400);
   };
 
   render() {
@@ -39,15 +28,29 @@ export class EditPunchlist extends Component {
         }}
         validationSchema={Yup.object({
           tag: Yup.string()
-            .max(15, "Must be 15 characters or less")
-            .required("tag requerido"),
+            .max(15, "Maximo 15 caracteres")
+            .required("Tag requerido"),
+          description: Yup.string()
+            .max(500, "Maximo 500 caracteres")
+            .required("Descripcion requerida"),
+          owner: Yup.string()
+            .oneOf(["HATCH", "ABB", "VyC"], "Responsable no admitido")
+            .required("Responsable requerido"),
+          priority: Yup.number()
+            .max(3, "Prioridad maxima: 3")
+            .min(1, "Prioridad minima: 1")
+            .required("Prioridad requerida"),
+          progress: Yup.number()
+            .max(100, "Maximo 100%")
+            .min(0, "Minimo 0%")
+            .required("Avance requerido"),
         })}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log("submiting");
+        onSubmit={(values, FormikBag) => {
           setTimeout(() => {
-            setSubmitting(false);
+            FormikBag.setSubmitting(false);
           }, 400);
-          console.log(JSON.stringify(values, null, 2));
+          this.props.addToPunchlistAction(values);
+          this.closeModalHandler();
         }}
       >
         <Form className="form border rounded px-5 pb-5 pt-3">
@@ -66,8 +69,9 @@ export class EditPunchlist extends Component {
               />
             </div>
           </div>
-          <div className="row">
-            <div className="form-group col">
+
+          <div className="class row">
+            <div className="form-group col-4">
               <SelectField
                 name="owner"
                 label="Responsable"
@@ -87,9 +91,8 @@ export class EditPunchlist extends Component {
                 ]}
               />
             </div>
-          </div>
-          <div className="class row">
-            <div className="form-group col-6">
+
+            <div className="form-group col-4">
               <SelectField
                 name="priority"
                 label="Criticidad"
@@ -110,7 +113,7 @@ export class EditPunchlist extends Component {
               />
             </div>
 
-            <div className="form-group col-6">
+            <div className="form-group col-4">
               <InputField label="Avance" name="progress" type="number" />
             </div>
           </div>

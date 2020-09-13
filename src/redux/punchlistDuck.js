@@ -30,10 +30,10 @@ export default function punchlistReducer(state = initialState, action) {
 export const getPunchlistAction = () => async (dispatch, getState) => {
   try {
     dispatch({ type: PUNCHLIST_FETCHING });
-    let rawData = await fetch(
+    let res = await fetch(
       "http://localhost:5001/projectmngapi/us-central1/app/punchlist"
     );
-    const data = await rawData.json();
+    const data = await res.json();
     return dispatch({
       type: GET_PUNCHLIST_SUCCESS,
       payload: data,
@@ -49,7 +49,11 @@ export const getPunchlistAction = () => async (dispatch, getState) => {
 export const addToPunchlistAction = (data) => async (dispatch, getState) => {
   try {
     dispatch({ type: PUNCHLIST_FETCHING });
-    let doc = await fetch(
+    data.date = {
+      _seconds: new Date().getTime() / 1000,
+      _nanoseconds: 0,
+    };
+    let res = await fetch(
       "http://localhost:5001/projectmngapi/us-central1/app/punchlist/add",
       {
         method: "POST",
@@ -60,7 +64,7 @@ export const addToPunchlistAction = (data) => async (dispatch, getState) => {
         body: JSON.stringify(data),
       }
     );
-    const newDoc = await doc.json();
+    const newDoc = await res.json();
     data.id = newDoc.id
     const { punchlist } = getState().punchlist;
     punchlist.push(data);

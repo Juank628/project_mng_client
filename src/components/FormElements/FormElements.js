@@ -51,6 +51,9 @@ export function TextAreaField({ name, label, numberOfRows, placeholder }) {
             rows={numberOfRows}
             onChange={handleChange}
           ></textarea>
+          {meta.touched && meta.error && (
+            <div className="small text-danger">{meta.error}</div>
+          )}
         </div>
       )}
     </Field>

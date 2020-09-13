@@ -61,7 +61,6 @@ export class PunchList extends Component {
                   <th>Criticidad</th>
                   <th>Responsable</th>
                   <th>Avance</th>
-                  <th>Dias abierto</th>
                 </tr>
               </thead>
               <tbody>
@@ -73,20 +72,19 @@ export class PunchList extends Component {
                     <th>{item.priority}</th>
                     <th>{item.owner}</th>
                     <th>{item.progress}</th>
-                    <th>Dias abierto</th>
                   </tr>
                 ))}
               </tbody>
             </Table>
-            <Modal
-              show={this.state.showModal}
-              closeModal={this.closeModal}
-              title=""
-            >
-              <EditPunchlist />
-            </Modal>
           </div>
         )}
+        <Modal
+          show={this.state.showModal}
+          closeModal={this.closeModal}
+          title=""
+        >
+          <EditPunchlist closeModal={this.closeModal} />
+        </Modal>
       </React.Fragment>
     );
   }
